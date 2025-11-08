@@ -55,7 +55,7 @@ contract ABI {
     function hashFunc(string memory input) public pure returns (bytes32,bytes32,bytes32) {
         return (
             keccak256(abi.encodePacked(input)),
-            sha256(x)(abi.encodePacked(input)),
+            sha256(abi.encodePacked(input)),
             ripemd160(abi.encodePacked(input))
         );
     }
