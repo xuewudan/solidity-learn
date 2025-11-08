@@ -33,13 +33,17 @@ contract ABI {
         return bytes4(keccak256(bytes(func)));
     }
 
-// 0xa9059cbb000000000000000000000000c3ba5050ec45990f76474163c5ba673c244aaeca0000000000000000000000000000000000000000000000000000000000000064
-    function transfer(address addr, uint256 amount) public pure returns (bytes memory)
+    // 0xa9059cbb000000000000000000000000c3ba5050ec45990f76474163c5ba673c244aaeca0000000000000000000000000000000000000000000000000000000000000064
+    function transfer(address addr, uint256 amount)
+        public
+        pure
+        returns (bytes memory)
     {
         return msg.data;
     }
-// 0xa9059cbb000000000000000000000000c3ba5050ec45990f76474163c5ba673c244aaeca0000000000000000000000000000000000000000000000000000000000000064
-    function encodeFunctionCall() public pure  returns (bytes memory) {
+
+    // 0xa9059cbb000000000000000000000000c3ba5050ec45990f76474163c5ba673c244aaeca0000000000000000000000000000000000000000000000000000000000000064
+    function encodeFunctionCall() public pure returns (bytes memory) {
         return
             abi.encodeWithSignature(
                 "transfer(address,uint256)",
@@ -52,11 +56,38 @@ contract ABI {
     // 0x24016fcc42c8231f9320529ea87956f9b3879744e4b238417818432d5738b606
     // 0x24016fcc42c8231f9320529ea87956f9b3879744e4b238417818432d5738b606
     // 0x24016fcc42c8231f9320529ea87956f9b3879744e4b238417818432d5738b606
-    function hashFunc(string memory input) public pure returns (bytes32,bytes32,bytes32) {
+    function hashFunc(string memory input)
+        public
+        pure
+        returns (
+            bytes32,
+            bytes32,
+            bytes32
+        )
+    {
         return (
             keccak256(abi.encodePacked(input)),
             sha256(abi.encodePacked(input)),
             ripemd160(abi.encodePacked(input))
         );
+    }
+
+    // 数学运算
+    function mathFunc(
+        uint256 x,
+        uint256 y,
+        uint256 m
+    ) public pure returns (uint256, uint256) {
+        return (addmod(x, y, m), mulmod(x, y, m));
+    }
+
+    // 8.椭圆函数恢复公钥(ecrecover)
+    function recoverAddress(
+        bytes32 hash,
+        uint8 v,
+        bytes32 r,
+        bytes32 s
+    ) public pure returns (address) {
+        return ecrecover(hash, v, r, s);
     }
 }
