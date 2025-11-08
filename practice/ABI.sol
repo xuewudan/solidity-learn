@@ -22,4 +22,29 @@ contract ABI {
     {
         return abi.decode(data, (string, uint256));
     }
+
+    // 获取当前函数签名
+    function getSig() public pure returns (bytes4) {
+        return msg.sig;
+    }
+
+    //  计算函数选择器
+    function compputeSelector(string memory func) public view returns (bytes4) {
+        return bytes4(keccak256(bytes(func)));
+    }
+
+// 0xa9059cbb000000000000000000000000c3ba5050ec45990f76474163c5ba673c244aaeca0000000000000000000000000000000000000000000000000000000000000064
+    function transfer(address addr, uint256 amount) public pure returns (bytes memory)
+    {
+        return msg.data;
+    }
+// 0xa9059cbb000000000000000000000000c3ba5050ec45990f76474163c5ba673c244aaeca0000000000000000000000000000000000000000000000000000000000000064
+    function encodeFunctionCall() public pure  returns (bytes memory) {
+        return
+            abi.encodeWithSignature(
+                "transfer(address,uint256)",
+                0xC3Ba5050Ec45990f76474163c5bA673c244aaECA,
+                100
+            );
+    }
 }
