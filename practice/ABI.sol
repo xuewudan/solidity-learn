@@ -47,4 +47,16 @@ contract ABI {
                 100
             );
     }
+
+    // hash函数运算
+    // 0x24016fcc42c8231f9320529ea87956f9b3879744e4b238417818432d5738b606
+    // 0x24016fcc42c8231f9320529ea87956f9b3879744e4b238417818432d5738b606
+    // 0x24016fcc42c8231f9320529ea87956f9b3879744e4b238417818432d5738b606
+    function hashFunc(string memory input) public pure returns (bytes32,bytes32,bytes32) {
+        return (
+            keccak256(abi.encodePacked(input)),
+            sha256(x)(abi.encodePacked(input)),
+            ripemd160(abi.encodePacked(input))
+        );
+    }
 }
