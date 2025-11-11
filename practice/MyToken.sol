@@ -6,5 +6,8 @@ import {ERC20} from "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import {ERC20Permit} from "@openzeppelin/contracts/token/ERC20/extensions/ERC20Permit.sol";
 
 contract MyToken is ERC20, ERC20Permit {
-    constructor() ERC20("MyToken", "MTK") ERC20Permit("MyToken") {}
+    constructor() ERC20("MyToken", "MTK") ERC20Permit("MyToken") {
+        // 执行构造函数的时候，给自己铸造了100万枚MyToken
+        _mint(msg.sender, 1000000);
+    }
 }
