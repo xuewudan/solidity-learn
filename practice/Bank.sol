@@ -1,62 +1,58 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
-// 定义一个简单的银行接口
-interface IBank {
-    function deposit() external payable;
+contract Bank {
+    receive() external payable {}
 
-    function withdraw(uint256 amount) external;
+    event CallLog(bytes input, bytes output);
 
-    function getBalance() external view returns (uint256);
-}
-
-// 实现银行接口的合约
-contract Bank is IBank {
-    mapping(address => uint256) public balances;
-
-    function deposit() external payable override {
-        require(msg.value > 0, "jine must be > 0");
-        balances[msg.sender] += msg.value;
+    function withdrawWithTransfer() external {
+        payable(msg.sender).transfer(1 ether);
     }
 
-    function withdraw(uint256 amount) external override {
-        require(balances[msg.sender] >= amount, "yue is not enougth");
-        balances[msg.sender] -= amount;
-        payable(msg.sender).transfer(amount);
+    function withdrawWithSend() external {
+        bool success = payable(msg.sender).send(1 ether);
+        require(success, "Send failed");
     }
 
-    // 10000000000000000000
-    function getBalance() external view override returns (uint256) {
-        return balances[msg.sender];
+    function withdrawWithCall(bytes memory input) external {
+        // data 一般存在合约转给合约的交易
+        (bool success, bytes memory data) = payable(msg.sender).call{
+            value: 1 ether
+        }(input); // 括号里边传的是函数选择器+入参的一个bytes
+        require(success, "Call failed");
+        emit CallLog(input, data);
     }
 }
 
-// 使用银行接口的合约
-// 用户、客户端的合约
 contract BankUser {
-    // 存款
-    function depositToBank(address bankAddress) external payable {
-        IBank bank = IBank(bankAddress);
-        bank.deposit{value: msg.value}();
-    }
+
+    // 合约与合约之间的交易
+    Bank bank;
 
     receive() external payable {}
 
-    // 需要callback来兜底，如果交易失败了，需要callback来接收这个资金，否则资金就丢失了
-    fallback() external payable {}
-
-    // 取钱
-    function withdrawFromBank(address bankAddress, uint256 amount) external {
-        IBank bank = IBank(bankAddress);
-        bank.withdraw(amount);
+    constructor(address payable _bank) {
+        bank = Bank(_bank);
     }
 
-    function getBankBalance(address bankAddress)
-        external
-        view
-        returns (uint256)
-    {
-        IBank bank = IBank(bankAddress);
-        return bank.getBalance();
+    function withdrawWithTransfer() external {
+        bank.withdrawWithTransfer();
     }
+
+    function withdrawWithSend() external {
+        bank.withdrawWithSend();
+    }
+
+    function withdrawWithCall(bytes memory input) external {
+        bank.withdrawWithCall(abi.encodePacked(input));
+    }
+
+    function testPay() external payable returns (address) {
+        return address(this);
+    }
+
+    // 0x0000000000000000000000007ef2e0048f5baede046f6bf797943daf4ed8cb47
+
+    // 0x7EF2e0048f5bAeDe046f6BF797943daF4ED8CB47
 }
