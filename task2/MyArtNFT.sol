@@ -26,7 +26,7 @@ contract MyArtNFT is ERC721, Ownable {
         ERC721(name_, symbol_)
         Ownable(msg.sender)
     {
-        _tokenIdCounter = 0; // 从 0 开始计数，或者从 1 开始，取决于你的偏好
+        _tokenIdCounter = 0;
     }
 
     /**
@@ -35,6 +35,8 @@ contract MyArtNFT is ERC721, Ownable {
      * @param uri 该 NFT 对应的元数据 (metadata) JSON 文件的 IPFS 链接
      * @return 新铸造 NFT 的 token ID
      */
+     // https://ipfs.io/ipfs/bafkreidgiub66frsctihvtmqec3znoz4fmrqedpzl4wm4p4xrin4pp5azi
+    // final URI: https://ipfs.io/ipfs/bafkreidoireu5psz7l7bea6cxmcakwzsgql2bpqdsfvv7oqaqpts55rwba
     function mintNFT(address to, string memory uri)
         public
         onlyOwner
@@ -65,7 +67,7 @@ contract MyArtNFT is ERC721, Ownable {
      */
     function _setTokenURI(uint256 tokenId, string memory uri) internal virtual {
         require(
-            _ownerOf(tokenId) == address(0),
+            tokenId >=0,
             "ERC721Metadata: URI set of nonexistent token"
         );
         _tokenURIs[tokenId] = uri;
@@ -84,7 +86,8 @@ contract MyArtNFT is ERC721, Ownable {
         returns (string memory)
     {
         require(
-            _ownerOf(tokenId) == address(0),
+            // _ownerOf(tokenId) == address(0),
+            tokenId >=0,
             "ERC721Metadata: URI query for nonexistent token"
         );
         return _tokenURIs[tokenId];
