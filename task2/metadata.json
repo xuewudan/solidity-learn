@@ -1,0 +1,23 @@
+{
+  "name": "ART",
+  "description": "My Art Collection.",
+  "image": "https://ipfs.io/ipfs/bafkreidgiub66frsctihvtmqec3znoz4fmrqedpzl4wm4p4xrin4pp5azi", 
+  "attributes": [
+    {
+      "trait_type": "Style",
+      "value": "Digital Art"
+    },
+    {
+      "trait_type": "Mood",
+      "value": "Serene"
+    },
+    {
+      "trait_type": "Color",
+      "value": "Purple"
+    },
+    {
+      "trait_type": "Rarity",
+      "value": "Common"
+    }
+  ]
+}
